@@ -1,0 +1,118 @@
+name: identitygate
+
+services:
+  postgres:
+    image: postgres:16.8-alpine
+    environment:
+      POSTGRES_USER: identitygate
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: identitygate
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./scripts/init-databases.sql:/docker-entrypoint-initdb.d/init-databases.sql
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U identitygate -d identitygate"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.8.1
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: identitygate
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_ADMIN_USERNAME}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_ADMIN_PASSWORD}
+      KC_HTTP_ENABLED: "true"
+      KC_HEALTH_ENABLED: "true"
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: "8080"
+      KC_HOSTNAME_STRICT: "false"
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+      IDENTITYGATE_CLIENT_SECRET: ${IDENTITYGATE_CLIENT_SECRET}
+      FINANCE_CLIENT_SECRET: ${FINANCE_CLIENT_SECRET}
+      PROJECTS_CLIENT_SECRET: ${PROJECTS_CLIENT_SECRET}
+      SCIM_CLIENT_SECRET: ${SCIM_CLIENT_SECRET}
+    volumes:
+      - ./keycloak/realm-config:/opt/keycloak/data/import:ro
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  directory:
+    build:
+      context: .
+      dockerfile: scim-target/Dockerfile
+    environment:
+      DIRECTORY_TOKEN: ${DOWNSTREAM_SCIM_TOKEN}
+    command: ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8103"]
+    ports:
+      - "8103:8103"
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://identitygate:${POSTGRES_PASSWORD}@postgres:5432/identitygate
+      KEYCLOAK_INTERNAL_URL: http://keycloak:8080
+      KEYCLOAK_PUBLIC_URL: http://localhost:8080
+      DOWNSTREAM_SCIM_URL: http://directory:8103/scim/v2
+      FINANCE_INTERNAL_URL: http://finance:8101
+      PUBLIC_APP_URL: http://localhost:5173
+      WORKER_ENABLED: "true"
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  finance:
+    build:
+      context: .
+      dockerfile: demo-apps/finance/Dockerfile
+    environment:
+      KEYCLOAK_INTERNAL_URL: http://keycloak:8080
+      KEYCLOAK_PUBLIC_URL: http://localhost:8080
+      KEYCLOAK_REALM: northstar
+      OIDC_CLIENT_ID: northstar-finance
+      OIDC_CLIENT_SECRET: ${FINANCE_CLIENT_SECRET}
+      PUBLIC_APP_URL: http://localhost:8101
+      SESSION_SECRET: ${SESSION_SECRET}
+    ports:
+      - "8101:8101"
+
+  projects:
+    build:
+      context: .
+      dockerfile: demo-apps/projects/Dockerfile
+    environment:
+      KEYCLOAK_INTERNAL_URL: http://keycloak:8080
+      KEYCLOAK_PUBLIC_URL: http://localhost:8080
+      KEYCLOAK_REALM: northstar
+      OIDC_CLIENT_ID: northstar-projects
+      OIDC_CLIENT_SECRET: ${PROJECTS_CLIENT_SECRET}
+      PUBLIC_APP_URL: http://localhost:8102
+      SESSION_SECRET: ${SESSION_SECRET}
+    ports:
+      - "8102:8102"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:

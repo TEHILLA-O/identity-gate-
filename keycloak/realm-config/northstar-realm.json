@@ -1,0 +1,605 @@
+{
+  "realm": "northstar",
+  "displayName": "Northstar Digital",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": false,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": true,
+  "permanentLockout": false,
+  "failureFactor": 30,
+  "waitIncrementSeconds": 60,
+  "maxFailureWaitSeconds": 900,
+  "minimumQuickLoginWaitSeconds": 60,
+  "quickLoginCheckMilliSeconds": 1000,
+  "maxDeltaTimeSeconds": 43200,
+  "accessTokenLifespan": 300,
+  "accessTokenLifespanForImplicitFlow": 300,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+  "revokeRefreshToken": true,
+  "refreshTokenMaxReuse": 0,
+  "eventsEnabled": true,
+  "eventsExpiration": 2592000,
+  "adminEventsEnabled": true,
+  "adminEventsDetailsEnabled": true,
+  "eventsListeners": [
+    "jboss-logging"
+  ],
+  "enabledEventTypes": [
+    "LOGIN",
+    "LOGIN_ERROR",
+    "LOGOUT",
+    "LOGOUT_ERROR",
+    "CODE_TO_TOKEN",
+    "CODE_TO_TOKEN_ERROR",
+    "REFRESH_TOKEN",
+    "REFRESH_TOKEN_ERROR",
+    "REGISTER",
+    "REGISTER_ERROR",
+    "UPDATE_PASSWORD",
+    "VERIFY_EMAIL",
+    "CLIENT_LOGIN",
+    "CLIENT_LOGIN_ERROR"
+  ],
+  "internationalizationEnabled": false,
+  "scimApiEnabled": true,
+  "otpPolicyType": "totp",
+  "otpPolicyAlgorithm": "HmacSHA1",
+  "otpPolicyDigits": 6,
+  "otpPolicyPeriod": 30,
+  "passwordPolicy": "length(12) and notUsername",
+  "roles": {
+    "realm": [
+      {
+        "name": "employee",
+        "description": "employee",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "identitygate-user",
+        "description": "identitygate user",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "identitygate-admin",
+        "description": "identitygate admin",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "identitygate-operator",
+        "description": "identitygate operator",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "identitygate-reviewer",
+        "description": "identitygate reviewer",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "identitygate-auditor",
+        "description": "identitygate auditor",
+        "composite": false,
+        "clientRole": false
+      }
+    ],
+    "client": {
+      "northstar-finance": [
+        {
+          "name": "finance-reader",
+          "description": "finance reader",
+          "clientRole": true,
+          "composite": false
+        },
+        {
+          "name": "finance-analyst",
+          "description": "finance analyst",
+          "clientRole": true,
+          "composite": false
+        },
+        {
+          "name": "finance-approver",
+          "description": "finance approver",
+          "clientRole": true,
+          "composite": false
+        },
+        {
+          "name": "finance-admin",
+          "description": "finance admin",
+          "clientRole": true,
+          "composite": false
+        }
+      ],
+      "northstar-projects": [
+        {
+          "name": "project-reader",
+          "description": "project reader",
+          "clientRole": true,
+          "composite": false
+        },
+        {
+          "name": "project-contributor",
+          "description": "project contributor",
+          "clientRole": true,
+          "composite": false
+        },
+        {
+          "name": "project-admin",
+          "description": "project admin",
+          "clientRole": true,
+          "composite": false
+        }
+      ]
+    }
+  },
+  "groups": [
+    {
+      "name": "company-directory",
+      "attributes": {
+        "externalId": [
+          "company-directory"
+        ]
+      },
+      "realmRoles": [
+        "employee",
+        "identitygate-user"
+      ],
+      "clientRoles": {}
+    },
+    {
+      "name": "dept-engineering",
+      "attributes": {
+        "externalId": [
+          "dept-engineering"
+        ]
+      },
+      "realmRoles": [],
+      "clientRoles": {
+        "northstar-projects": [
+          "project-reader",
+          "project-contributor"
+        ]
+      }
+    },
+    {
+      "name": "dept-finance",
+      "attributes": {
+        "externalId": [
+          "dept-finance"
+        ]
+      },
+      "realmRoles": [],
+      "clientRoles": {
+        "northstar-finance": [
+          "finance-reader"
+        ]
+      }
+    },
+    {
+      "name": "dept-sales",
+      "attributes": {
+        "externalId": [
+          "dept-sales"
+        ]
+      },
+      "realmRoles": [],
+      "clientRoles": {
+        "northstar-projects": [
+          "project-reader"
+        ]
+      }
+    },
+    {
+      "name": "dept-human-resources",
+      "attributes": {
+        "externalId": [
+          "dept-human-resources"
+        ]
+      },
+      "realmRoles": [],
+      "clientRoles": {
+        "northstar-projects": [
+          "project-reader"
+        ]
+      }
+    },
+    {
+      "name": "dept-operations",
+      "attributes": {
+        "externalId": [
+          "dept-operations"
+        ]
+      },
+      "realmRoles": [],
+      "clientRoles": {
+        "northstar-projects": [
+          "project-reader"
+        ]
+      }
+    },
+    {
+      "name": "dept-security",
+      "attributes": {
+        "externalId": [
+          "dept-security"
+        ]
+      },
+      "realmRoles": [],
+      "clientRoles": {
+        "northstar-projects": [
+          "project-reader"
+        ],
+        "northstar-finance": [
+          "finance-reader"
+        ]
+      }
+    },
+    {
+      "name": "contractors",
+      "attributes": {
+        "externalId": [
+          "contractors"
+        ]
+      },
+      "realmRoles": [],
+      "clientRoles": {}
+    },
+    {
+      "name": "service-accounts",
+      "attributes": {
+        "externalId": [
+          "service-accounts"
+        ]
+      },
+      "realmRoles": [],
+      "clientRoles": {}
+    },
+    {
+      "name": "finance-analysts",
+      "attributes": {
+        "externalId": [
+          "finance-analysts"
+        ]
+      },
+      "realmRoles": [],
+      "clientRoles": {
+        "northstar-finance": [
+          "finance-analyst"
+        ]
+      }
+    },
+    {
+      "name": "finance-approvers",
+      "attributes": {
+        "externalId": [
+          "finance-approvers"
+        ]
+      },
+      "realmRoles": [],
+      "clientRoles": {
+        "northstar-finance": [
+          "finance-approver"
+        ]
+      }
+    },
+    {
+      "name": "finance-administrators",
+      "attributes": {
+        "externalId": [
+          "finance-administrators"
+        ]
+      },
+      "realmRoles": [],
+      "clientRoles": {
+        "northstar-finance": [
+          "finance-admin"
+        ]
+      }
+    },
+    {
+      "name": "project-administrators",
+      "attributes": {
+        "externalId": [
+          "project-administrators"
+        ]
+      },
+      "realmRoles": [],
+      "clientRoles": {
+        "northstar-projects": [
+          "project-admin"
+        ]
+      }
+    },
+    {
+      "name": "service-finance",
+      "attributes": {
+        "externalId": [
+          "service-finance"
+        ]
+      },
+      "realmRoles": [],
+      "clientRoles": {
+        "northstar-finance": [
+          "finance-reader"
+        ]
+      }
+    },
+    {
+      "name": "service-projects",
+      "attributes": {
+        "externalId": [
+          "service-projects"
+        ]
+      },
+      "realmRoles": [],
+      "clientRoles": {
+        "northstar-projects": [
+          "project-reader"
+        ]
+      }
+    },
+    {
+      "name": "identity-administrators",
+      "attributes": {
+        "externalId": [
+          "identity-administrators"
+        ]
+      },
+      "realmRoles": [
+        "identitygate-admin"
+      ],
+      "clientRoles": {}
+    },
+    {
+      "name": "identity-operators",
+      "attributes": {
+        "externalId": [
+          "identity-operators"
+        ]
+      },
+      "realmRoles": [
+        "identitygate-operator"
+      ],
+      "clientRoles": {}
+    },
+    {
+      "name": "identity-reviewers",
+      "attributes": {
+        "externalId": [
+          "identity-reviewers"
+        ]
+      },
+      "realmRoles": [
+        "identitygate-reviewer"
+      ],
+      "clientRoles": {}
+    },
+    {
+      "name": "identity-auditors",
+      "attributes": {
+        "externalId": [
+          "identity-auditors"
+        ]
+      },
+      "realmRoles": [
+        "identitygate-auditor"
+      ],
+      "clientRoles": {}
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "identitygate",
+      "name": "IdentityGate",
+      "description": "IdentityGate",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "${IDENTITYGATE_CLIENT_SECRET}",
+      "serviceAccountsEnabled": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "frontchannelLogout": true,
+      "fullScopeAllowed": true,
+      "rootUrl": "http://localhost:5173",
+      "baseUrl": "http://localhost:5173",
+      "redirectUris": [
+        "http://localhost:5173/api/v1/auth/callback"
+      ],
+      "webOrigins": [
+        "http://localhost:5173"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:5173",
+        "oauth2.device.authorization.grant.enabled": "false"
+      },
+      "defaultClientScopes": [
+        "roles",
+        "profile",
+        "email",
+        "web-origins",
+        "acr"
+      ],
+      "optionalClientScopes": [
+        "offline_access"
+      ],
+      "protocolMappers": [
+        {
+          "name": "identitygate-api-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.custom.audience": "identitygate-api",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true",
+            "userinfo.token.claim": "false"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "northstar-finance",
+      "name": "Northstar Finance",
+      "description": "Northstar Finance",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "${FINANCE_CLIENT_SECRET}",
+      "serviceAccountsEnabled": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "frontchannelLogout": true,
+      "fullScopeAllowed": true,
+      "rootUrl": "http://localhost:8101",
+      "baseUrl": "http://localhost:8101",
+      "redirectUris": [
+        "http://localhost:8101/auth/callback"
+      ],
+      "webOrigins": [
+        "http://localhost:8101"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:8101",
+        "oauth2.device.authorization.grant.enabled": "false"
+      },
+      "defaultClientScopes": [
+        "roles",
+        "profile",
+        "email",
+        "web-origins",
+        "acr"
+      ],
+      "optionalClientScopes": [
+        "offline_access"
+      ],
+      "protocolMappers": [
+        {
+          "name": "finance-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.custom.audience": "northstar-finance",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true",
+            "userinfo.token.claim": "false"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "northstar-projects",
+      "name": "Northstar Projects",
+      "description": "Northstar Projects",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "${PROJECTS_CLIENT_SECRET}",
+      "serviceAccountsEnabled": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "frontchannelLogout": true,
+      "fullScopeAllowed": true,
+      "rootUrl": "http://localhost:8102",
+      "baseUrl": "http://localhost:8102",
+      "redirectUris": [
+        "http://localhost:8102/auth/callback"
+      ],
+      "webOrigins": [
+        "http://localhost:8102"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:8102",
+        "oauth2.device.authorization.grant.enabled": "false"
+      },
+      "defaultClientScopes": [
+        "roles",
+        "profile",
+        "email",
+        "web-origins",
+        "acr"
+      ],
+      "optionalClientScopes": [
+        "offline_access"
+      ],
+      "protocolMappers": [
+        {
+          "name": "projects-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.custom.audience": "northstar-projects",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true",
+            "userinfo.token.claim": "false"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "identitygate-provisioner",
+      "name": "IdentityGate Provisioner",
+      "description": "IdentityGate Provisioner",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "${SCIM_CLIENT_SECRET}",
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "frontchannelLogout": true,
+      "fullScopeAllowed": false,
+      "rootUrl": "",
+      "baseUrl": "",
+      "redirectUris": [],
+      "webOrigins": [],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "+",
+        "oauth2.device.authorization.grant.enabled": "false"
+      },
+      "defaultClientScopes": [
+        "roles"
+      ],
+      "optionalClientScopes": [
+        "offline_access"
+      ],
+      "protocolMappers": [
+        {
+          "name": "scim-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.custom.audience": "http://localhost:8080/realms/northstar/scim/v2",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true",
+            "userinfo.token.claim": "false"
+          }
+        }
+      ]
+    }
+  ],
+  "clientScopes": []
+}

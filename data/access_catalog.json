@@ -1,0 +1,56 @@
+{
+  "version": "2026.11.1",
+  "realm_roles": [
+    "employee",
+    "identitygate-user",
+    "identitygate-admin",
+    "identitygate-operator",
+    "identitygate-reviewer",
+    "identitygate-auditor"
+  ],
+  "clients": {
+    "northstar-finance": ["finance-reader", "finance-analyst", "finance-approver", "finance-admin"],
+    "northstar-projects": ["project-reader", "project-contributor", "project-admin"]
+  },
+  "groups": {
+    "company-directory": {"realm": ["employee", "identitygate-user"], "clients": {}},
+    "dept-engineering": {"realm": [], "clients": {"northstar-projects": ["project-reader", "project-contributor"]}},
+    "dept-finance": {"realm": [], "clients": {"northstar-finance": ["finance-reader"]}},
+    "dept-sales": {"realm": [], "clients": {"northstar-projects": ["project-reader"]}},
+    "dept-human-resources": {"realm": [], "clients": {"northstar-projects": ["project-reader"]}},
+    "dept-operations": {"realm": [], "clients": {"northstar-projects": ["project-reader"]}},
+    "dept-security": {
+      "realm": [],
+      "clients": {
+        "northstar-projects": ["project-reader"],
+        "northstar-finance": ["finance-reader"]
+      }
+    },
+    "contractors": {"realm": [], "clients": {}},
+    "service-accounts": {"realm": [], "clients": {}},
+    "finance-analysts": {"realm": [], "clients": {"northstar-finance": ["finance-analyst"]}},
+    "finance-approvers": {"realm": [], "clients": {"northstar-finance": ["finance-approver"]}},
+    "finance-administrators": {"realm": [], "clients": {"northstar-finance": ["finance-admin"]}},
+    "project-administrators": {"realm": [], "clients": {"northstar-projects": ["project-admin"]}},
+    "service-finance": {"realm": [], "clients": {"northstar-finance": ["finance-reader"]}},
+    "service-projects": {"realm": [], "clients": {"northstar-projects": ["project-reader"]}},
+    "identity-administrators": {"realm": ["identitygate-admin"], "clients": {}},
+    "identity-operators": {"realm": ["identitygate-operator"], "clients": {}},
+    "identity-reviewers": {"realm": ["identitygate-reviewer"], "clients": {}},
+    "identity-auditors": {"realm": ["identitygate-auditor"], "clients": {}}
+  },
+  "department_groups": {
+    "Engineering": "dept-engineering",
+    "Finance": "dept-finance",
+    "Sales": "dept-sales",
+    "Human Resources": "dept-human-resources",
+    "Operations": "dept-operations",
+    "Security": "dept-security"
+  },
+  "birthright_groups": ["company-directory"],
+  "application_owners": {
+    "northstar-finance": "priya.nair",
+    "northstar-projects": "hana.iqbal"
+  },
+  "security_reviewer": "amira.shah"
+}

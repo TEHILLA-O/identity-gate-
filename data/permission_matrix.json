@@ -1,0 +1,70 @@
+{
+  "version": "2026.11.1",
+  "applications": {
+    "northstar-finance": {
+      "name": "Northstar Finance",
+      "owner_role": "finance-admin",
+      "actions": {
+        "report:read": ["finance-reader", "finance-analyst", "finance-approver", "finance-admin"],
+        "report:create": ["finance-analyst"],
+        "payment:approve": ["finance-approver"],
+        "app:configure": ["finance-admin"]
+      }
+    },
+    "northstar-projects": {
+      "name": "Northstar Projects",
+      "owner_role": "project-admin",
+      "actions": {
+        "project:read": ["project-reader", "project-contributor", "project-admin"],
+        "project:write": ["project-contributor"],
+        "project:manage": ["project-admin"]
+      }
+    }
+  },
+  "privileged_roles": [
+    "finance-approver",
+    "finance-admin",
+    "project-admin",
+    "identitygate-admin"
+  ],
+  "sensitive_roles": [
+    "finance-analyst",
+    "finance-approver",
+    "finance-admin",
+    "project-admin",
+    "identitygate-admin",
+    "identitygate-operator"
+  ],
+  "sod": [
+    {
+      "id": "SOD-FIN-01",
+      "version": 1,
+      "severity": "high",
+      "scope": "northstar-finance",
+      "kind": "permission",
+      "left": {"application": "northstar-finance", "permission": "report:create"},
+      "right": {"application": "northstar-finance", "permission": "payment:approve"},
+      "explanation": "Creating financial records and approving payments must be performed by different people."
+    },
+    {
+      "id": "SOD-IGA-01",
+      "version": 1,
+      "severity": "high",
+      "scope": "identitygate",
+      "kind": "role",
+      "left": {"application": "realm", "role": "identitygate-admin"},
+      "right": {"application": "realm", "role": "identitygate-auditor"},
+      "explanation": "A person who administers identities must not also be the independent auditor of those changes."
+    },
+    {
+      "id": "SOD-IGA-02",
+      "version": 1,
+      "severity": "medium",
+      "scope": "identitygate",
+      "kind": "role",
+      "left": {"application": "realm", "role": "identitygate-operator"},
+      "right": {"application": "realm", "role": "identitygate-auditor"},
+      "explanation": "Operators who change access should not be the sole auditors of those changes."
+    }
+  ]
+}
